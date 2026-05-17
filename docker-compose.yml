@@ -1,0 +1,47 @@
+
+
+services:
+  web:
+    build: .
+    container_name: ticketing_web
+    ports:
+      - "9090:80"          # تغییر از 8080 به 9090
+    volumes:
+      - ./uploads:/var/www/html/uploads
+      - .:/var/www/html/          # ← این خط رو اضافه کن
+
+    environment:
+      DB_HOST: db
+      DB_NAME: ticketing
+      DB_USER: root
+      DB_PASS: ${MYSQL_ROOT_PASSWORD:-secret}
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    container_name: ticketing_db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-secret}
+      MYSQL_DATABASE: ticketing
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3308:3306"         # تغییر از 3307 به 3308
+    restart: unless-stopped
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: ticketing_pma
+    ports:
+      - "9091:80"           # تغییر از 8081 به 9091
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    depends_on:
+      - db
+    restart: unless-stopped
+
+volumes:
+  db_data:
