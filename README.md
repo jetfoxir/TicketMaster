@@ -63,7 +63,7 @@
 1. پروژه را دریافت کنید:
 
    ```bash
-   git clone https://github.com/YOUR_USERNAME/ticketing.git
+   git clone https://github.com/jetfoxir/ticketing.git
    cd ticketing
    ```
 
